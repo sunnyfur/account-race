@@ -1,21 +1,50 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-    <Form />
+  <div class="container">
+    <login-form
+      v-if="isAgree"
+      :user="user"
+      :title="titleLogin"
+      @submit="registerUser"
+    />
+    <form-view v-else :race="race" @submit="registerRace" :title="titleSend" />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-import Form from "@/components/Form.vue";
+import FormView from "@/components/FormView.vue";
+import LoginForm from "@/components/LoginForm.vue";
+import { mapActions, mapState } from "vuex";
 
 export default {
-  name: "HomeView",
+  data() {
+    return {
+      titleLogin: "Зарегистрироваться",
+      titleSend: "Отправить заявку",
+    };
+  },
   components: {
-    HelloWorld,
-    Form,
+    FormView,
+    LoginForm,
+  },
+  methods: {
+    ...mapActions({
+      registerUser: "auth/registerUser",
+      registerRace: "auth/registerRace",
+    }),
+  },
+
+  computed: {
+    ...mapState({
+      isAgree: (state) => state.auth.isAgree,
+      race: (state) => state.auth.race,
+      user: (state) => state.auth.user,
+    }),
   },
 };
 </script>
+
+<style lang="scss">
+.container {
+  max-width: $desktop;
+}
+</style>

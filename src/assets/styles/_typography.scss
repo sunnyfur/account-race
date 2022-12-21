@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "Pacifico";
+  src: url("@/assets/fonts/Pacifico/Pacifico-Regular.ttf");
+
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Nunito Sans";
+  src: url("@/assets/fonts/Nunito_Sans/NunitoSans-Regular.ttf");
+
+  font-weight: 400;
+}
+
+$header: "Pacifico", cursive;
+$text: "Nunito Sans", sans-serif;

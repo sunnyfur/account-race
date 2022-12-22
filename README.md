@@ -1,4 +1,4 @@
-# account-race
+# SPA for register in race
 
 ## Project setup
 
@@ -13,7 +13,3 @@ npm run serve
 ```
 
 ### Compiles and minifies for production
-
-```
-npm run build
-```

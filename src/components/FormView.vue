@@ -1,9 +1,9 @@
 <template>
   <form @submit.prevent class="form">
-    <common-field label="ФИО" name="name" :error="v$.currRace.name.$errors"
+    <common-field label="ФИО" name="name" :error="v$.race.name.$errors"
       ><common-input
         name="name"
-        v-model="v$.currRace.name.$model"
+        v-model="v$.race.name.$model"
         type="text"
         placeholder="Фамилия Имя Отчество"
       />
@@ -12,43 +12,39 @@
     <common-field
       label="Дата рождения"
       name="birthday"
-      :error="v$.currRace.birthday.$errors"
+      :error="v$.race.birthday.$errors"
     >
       <common-input
         name="birthday"
-        v-model="v$.currRace.birthday.$model"
+        v-model="v$.race.birthday.$model"
         type="date"
         :max="maxDate"
     /></common-field>
 
-    <common-field label="Email" name="email" :error="v$.currRace.email.$errors"
+    <common-field label="Email" name="email" :error="v$.race.email.$errors"
       ><common-input
         name="email"
-        v-model="v$.currRace.email.$model"
+        v-model="v$.race.email.$model"
         type="email"
         placeholder="email"
       />
     </common-field>
-    <common-field
-      label="Телефон"
-      name="phone"
-      :error="v$.currRace.phone.$errors"
-    >
+    <common-field label="Телефон" name="phone" :error="v$.race.phone.$errors">
       <common-input
         name="phone"
-        v-model="v$.currRace.phone.$model"
+        v-model="v$.race.phone.$model"
         type="tel"
         placeholder="+7 XXX XXX XX XX"
-        @keyup="toMask"
+        v-phone
       />
     </common-field>
 
     <common-field
       label="Дистанция"
       name="distance"
-      :error="v$.currRace.distance.$errors"
+      :error="v$.race.distance.$errors"
       ><common-select
-        v-model="v$.currRace.distance.$model"
+        v-model="v$.race.distance.$model"
         :options="optionsDistances"
       />
     </common-field>
@@ -56,11 +52,11 @@
     <common-field
       label="Сумма взноса, руб."
       name="payment"
-      :error="v$.currRace.payment.$errors"
+      :error="v$.race.payment.$errors"
     >
       <common-input
         name="payment"
-        v-model="v$.currRace.payment.$model"
+        v-model="v$.race.payment.$model"
         type="number"
         min="10"
         max="10000"
@@ -71,8 +67,8 @@
     </label>
 
     <common-button
-      :disabled="v$.currRace.$invalid"
-      @click="$emit('submit', { race: currRace, isAgree })"
+      :disabled="v$.race.$invalid"
+      @click="$emit('submit', { race: race, isAgree })"
       >{{ title }}</common-button
     >
   </form>
@@ -102,7 +98,7 @@ const isValidAge = (value) => {
 export default {
   data() {
     return {
-      currRace: {},
+      currRace: { ...this.race },
       optionsDistances: [
         { value: 3, name: "3 км" },
         { value: 5, name: "5 км" },
@@ -128,33 +124,10 @@ export default {
   setup() {
     return { v$: useValidate() };
   },
-  mounted() {
-    this.currRace = { ...this.race };
-  },
 
-  methods: {
-    toMask(e) {
-      let value = e.target.value;
-      const x = value
-        .replace(/\D/gi, "")
-        .match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-
-      if (!x[2] && x[1] !== "") {
-        this.currRace.phone =
-          x[1] === "7" || x[1] === "8" ? "+7 " : "+7 " + x[1];
-      } else {
-        this.currRace.phone =
-          "+7 " +
-          x[2] +
-          (x[3] ? " " + x[3] : "") +
-          (x[4] ? " " + x[4] : "") +
-          (x[5] ? " " + x[5] : "");
-      }
-    },
-  },
   validations() {
     return {
-      currRace: {
+      race: {
         name: {
           required: helpers.withMessage(
             "Поле обязательно для заполнения",

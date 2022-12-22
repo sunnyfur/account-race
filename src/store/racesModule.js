@@ -48,6 +48,7 @@ export const racesModule = {
       commit("setRaces", data.concat(allRaces.users));
       commit("setSelectedSort", "date");
     },
+
     addRace({ commit }, race) {
       let data = getLocalStorageData("races", "users");
       if (!data) data = [];
@@ -55,11 +56,14 @@ export const racesModule = {
       setLocalStorageData("races", "users", data);
 
       commit("addRace", race);
+      commit("setError", "Заявка отправлена", { root: true });
     },
+
     getRace({ state, dispatch }, id) {
       if (state.races.length == 0) dispatch("loadRaces");
       return state.races.filter((race) => race.id === id)[0];
     },
+
     saveRace({ state, commit }, race) {
       const newData = [state.races.filter((race) => race != race.id), race];
       commit("setRaces", newData);

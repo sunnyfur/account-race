@@ -55,5 +55,6 @@ body {
   align-items: center;
   align-content: center;
   justify-content: center;
+  min-height: calc(100vh - 10rem);
 }
 </style>

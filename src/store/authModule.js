@@ -53,7 +53,7 @@ export const authModule = {
 
       if (!data) data = [];
       if (data.filter((elem) => elem.login === user.login)[0]) {
-        throw new Error("Пользователь уже зарегистрирован");
+        commit("setError", "Пользователь уже зарегистрирован", { root: true });
       } else {
         data.push(user);
 
@@ -65,7 +65,6 @@ export const authModule = {
       });
     },
     registerRace({ state, commit, dispatch }, params) {
-      //toDO вызвать функцию другого стейта
       const date = new Date();
       dispatch(
         "races/addRace",
@@ -85,18 +84,30 @@ export const authModule = {
     },
     async loginUser({ commit, dispatch }, user) {
       const data = getLocalStorageData("races", "logins");
-      if (!data) throw new Error("Нет зарегистрированных пользователей");
-      const userCorrect = data.filter((elem) => elem.login === user.login)[0];
+      if (!data) {
+        commit("setError", "Нет зарегистрированных пользователей", {
+          root: true,
+        });
+      } else {
+        const userCorrect = data.filter((elem) => elem.login === user.login)[0];
 
-      if (!userCorrect) throw new Error("Нет пользователя с таким логином");
-      if (userCorrect.password !== user.password)
-        throw new Error("Пароль не верен");
-      const race = await dispatch("races/getRace", userCorrect.id, {
-        root: true,
-      });
+        if (!userCorrect) {
+          commit("setError", "Нет пользователя с таким логином", {
+            root: true,
+          });
+        } else {
+          if (userCorrect.password !== user.password) {
+            commit("setError", "Пароль не верен", { root: true });
+          } else {
+            const race = await dispatch("races/getRace", userCorrect.id, {
+              root: true,
+            });
 
-      commit("setRace", race);
-      commit("setIsAuth", true);
+            commit("setRace", race);
+            commit("setIsAuth", true);
+          }
+        }
+      }
     },
     saveRace({ commit, dispatch }, params) {
       commit("setIsAuth", false);

@@ -7,13 +7,16 @@
       @submit="registerUser"
     />
     <form-view v-else :race="race" @submit="registerRace" :title="titleSend" />
+    <common-dialog v-model:show="error" @close="clearError">
+      <p>{{ error }}</p>
+    </common-dialog>
   </div>
 </template>
 
 <script>
 import FormView from "@/components/FormView.vue";
 import LoginForm from "@/components/LoginForm.vue";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {
   data() {
@@ -31,6 +34,9 @@ export default {
       registerUser: "auth/registerUser",
       registerRace: "auth/registerRace",
     }),
+    ...mapMutations({
+      clearError: "clearError",
+    }),
   },
 
   computed: {
@@ -38,6 +44,7 @@ export default {
       isAgree: (state) => state.auth.isAgree,
       race: (state) => state.auth.race,
       user: (state) => state.auth.user,
+      error: (state) => state.error,
     }),
   },
 };

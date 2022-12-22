@@ -66,7 +66,7 @@
         max="10000"
     /></common-field>
 
-    <label>
+    <label v-if="!isAuth">
       <input type="checkbox" v-model="isAgree" />Согласие на создание профиля
     </label>
 
@@ -120,6 +120,9 @@ export default {
     title: {
       type: String,
       required: true,
+    },
+    isAuth: {
+      type: Boolean,
     },
   },
   setup() {
@@ -215,5 +218,6 @@ export default {
   flex-direction: column;
   gap: 1rem;
   border-radius: 15px;
+  min-width: 340px;
 }
 </style>

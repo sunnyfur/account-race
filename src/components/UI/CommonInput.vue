@@ -17,8 +17,6 @@ export default {
     type: { type: String, default: "text" },
     name: { type: String, required: true },
     placeholder: { type: String },
-    label: { type: String, required: true },
-    error: { type: Array, required: false },
     modelValue: [String, Number, Date],
   },
   methods: {
